@@ -7,14 +7,14 @@
 - [For Developers](#for-developers)
 
 ## Introduction
-In this work, we present Prism, the first system designed to enable lossless immersive computing over consumer networks.
+In this work, we present Vero, the first system designed to enable lossless immersive computing over consumer networks.
 Emerging immersive workloads (e.g., medical simulation and industrial design) are executed remotely because large proprietary assets and sensitive data are impractical or undesirable to replicate widely. Yet, they must preserve fine visual detail—losing a thin vessel or sub-millimeter edge can compromise the accuracy or even validity of the results. The prevailing architectures render frames in the cloud and stream them as compressed video. To stay within bandwidth budgets of typical consumer networks, they have to rely on lossy compression that quantizes or blurs high-definition geometry, greatly impacting the QoS of fidelity-critical use cases.
 
-To address this, we design and implement Prism, the first system that enables lossless immersive computing over consumer networks. We introduce a new architecture termed semantic GPU disaggregation: instead of rendering and streaming the frames, the cloud strategically offloads GPU rendering tasks to the client, completely avoiding lossy video compression. Specifically, Prism sends a reorganized, lightweight stream of low-level graphics commands and resource deltas to the client by exploiting latent structural regularities hidden in GPU command/resource semantics, and losslessly reconstruct the render pipeline on the client. With a practical bandwidth budget below 100 Mbps, Prism achieves substantially higher frame rates and lower latency compared to video streaming.
+To address this, we design and implement Vero, the first system that enables lossless immersive computing over consumer networks. We introduce a new architecture termed semantic GPU disaggregation: instead of rendering and streaming the frames, the cloud strategically offloads GPU rendering tasks to the client, completely avoiding lossy video compression. Specifically, Vero sends a reorganized, lightweight stream of low-level graphics commands and resource deltas to the client by exploiting latent structural regularities hidden in GPU command/resource semantics, and losslessly reconstruct the render pipeline on the client. With a practical bandwidth budget below 100 Mbps, Vero achieves substantially higher frame rates and lower latency compared to video streaming.
 
 ## Code Release
 We have released the code for both server and client. In total, the core logic consists of 80k lines of C++ code.
-The code is available at [Prism-Immersive/Prism-Immersive.github.io](https://github.com/Prism-Immersive/Prism-Immersive.github.io).
+The code is available at [Vero-Immersive/Vero-Immersive.github.io](https://github.com/Vero-Immersive/Vero-Immersive.github.io).
 
 The code is organized as follows:
 ### Client
@@ -541,7 +541,7 @@ The code is organized as follows:
 ## For Developers
 
 ### Implementation Overview
-Prism  is designed as a userspace GPU driver library that exposes standard OpenGL ES interfaces for compatibility with existing immersive applications.
+Vero  is designed as a userspace GPU driver library that exposes standard OpenGL ES interfaces for compatibility with existing immersive applications.
 
 ### Server Deployment
 The server runs containerized Android applications on x86-based Linux servers using Docker for filesystem isolation. We utilize Intel Houdini binary translator for ARM compatibility and bypass Android's system-wide display composition for optimal performance. The server captures only foreground application GPU operations, discarding other system rendering instructions to minimize overhead.
@@ -550,7 +550,7 @@ The server runs containerized Android applications on x86-based Linux servers us
 The client operates as a standard userspace application implementing triple-buffering architecture. GPU operations execute on dedicated render buffers while a separate presentation thread manages the display surface. This design ensures smooth frame presentation and pipeline resilience against network fluctuations.
 
 ### Network Configuration
-Prism requires reliable TCP transport with BBR congestion control, as GPU operations cannot be dropped without corrupting the rendering pipeline state. Each render thread utilizes a dedicated network channel for parallel command transmission while maintaining operation ordering through resource barrier protocols.
+Vero requires reliable TCP transport with BBR congestion control, as GPU operations cannot be dropped without corrupting the rendering pipeline state. Each render thread utilizes a dedicated network channel for parallel command transmission while maintaining operation ordering through resource barrier protocols.
 
 ### System Requirements
 - **Server**: x86-64 Linux with Docker support, containerized Android runtime
